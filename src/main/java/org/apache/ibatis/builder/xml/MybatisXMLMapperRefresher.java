@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2020, wandalong (hnxyhcwdl1003@163.com).
+ * Copyright (c) 2010-2020, vindell (https://github.com/vindell).
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -38,14 +38,12 @@ import org.springframework.core.io.Resource;
 
 /**
  * 
- * *******************************************************************
  * @className	： MybatisXMLMapperRefresher
  * @description	： TODO(描述这个类的作用)
- * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
- * @date		： 2017年5月8日 下午8:00:02
+ * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @date		： 2017年9月12日 下午11:36:11
  * @version 	V1.0
  * @see http://blog.csdn.net/baochanghong/article/details/51939115 
- * *******************************************************************
  */
 public class MybatisXMLMapperRefresher implements java.lang.Runnable {  
 	

@@ -24,8 +24,6 @@ import org.apache.ibatis.reflection.MetaObject;
 /**
  * @className	： BoundSqlUtils
  * @description	： BoundSql对象操作工具
- * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
- * @date		： Jan 27, 2016 10:15:48 AM
  * @version 	V1.0 
  */
 public class BoundSQLUtils {
@@ -46,8 +44,6 @@ public class BoundSQLUtils {
      *      }
      *      setParameters(prepStat, configuration, countBS, parameterObject);
      * </pre>
-	 * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
-	 * @date 		：Jan 27, 2016 10:19:55 AM
 	 * @param sourceBoundSql
 	 * @param targetBoundSql
 	 */

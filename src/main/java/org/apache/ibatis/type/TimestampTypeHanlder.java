@@ -25,11 +25,6 @@ import java.sql.Timestamp;
  * 
  * @className: TimestampTypeHanlder
  * @description: 将字符串格式的时间:<code>yyyy-mm-dd hh:mm:ss[.f...]</code>转换为JDBC能够识别的类型。
- * @author : wandalong
- * @date : 上午11:19:40 2015-4-15
- * @modify by:
- * @modify date :
- * @modify description :
  */
 public class TimestampTypeHanlder extends BaseTypeHandler<String> {
 

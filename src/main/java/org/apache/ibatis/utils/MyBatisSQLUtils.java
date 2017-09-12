@@ -24,8 +24,6 @@ public class MyBatisSQLUtils {
 	/***
 	 * 
 	 * @description	：
-	 * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
-	 * @date 		：Jan 27, 2016 10:51:23 AM
 	 * @param obj		: 参数对象
 	 * @param isReplace	: 是否替换语句中的单引号 true：替换 false:不替换
 	 * @return
@@ -53,15 +51,12 @@ public class MyBatisSQLUtils {
 
 	/**
 	 * 
-	 *@描述：解析出执行的SQL
-	 *@创建人:wandalong
-	 *@创建时间:2014-10-11下午06:19:49
-	 *@修改人:
-	 *@修改时间:
-	 *@修改描述:
-	 *@param configuration
-	 *@param boundSql
-	 *@return
+	 * @description	： 解析出执行的SQL
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @date 		：2017年9月12日 下午11:34:03
+	 * @param statement
+	 * @param parameterObject
+	 * @return
 	 */
 	public static String getRunSQL(MappedStatement statement,Object parameterObject) {
 		return getRunSQL(statement,parameterObject,false);
@@ -69,16 +64,13 @@ public class MyBatisSQLUtils {
 
 	/**
 	 * 
-	 *@描述：解析出执行的SQL
-	 *@创建人:wandalong
-	 *@创建时间:2014-10-11下午06:19:49
-	 *@修改人:
-	 *@修改时间:
-	 *@修改描述:
-	 *@param configuration
-	 *@param boundSql
-	 *@param isReplace 是否替换语句中的单引号 true：替换 false:不替换
-	 *@return
+	 * @description	： 解析出执行的SQL
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @date 		：2017年9月12日 下午11:33:40
+	 * @param statement
+	 * @param parameterObject
+	 * @param isReplace 是否替换语句中的单引号 true：替换 false:不替换
+	 * @return
 	 */
 	public static String getRunSQL(MappedStatement statement,Object parameterObject,boolean isReplace) {
 		BoundSql boundSql = statement.getBoundSql(parameterObject);
@@ -99,8 +91,6 @@ public class MyBatisSQLUtils {
 	/**
 	 * 
 	 * @description	：解析参数
-	 * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
-	 * @date 		：Jan 27, 2016 11:14:42 AM
 	 * @param statement
 	 * @param parameterObject
 	 * @return
@@ -148,8 +138,6 @@ public class MyBatisSQLUtils {
 
 	/** 
 	 * @description	：运行期获取MyBatis执行的SQL及参数
-	 * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
-	 * @date 		：Jan 27, 2016 11:12:49 AM
 	 * @param statementID : Mapper xml 文件里的select Id 
 	 * @param parameterObject:  参数
 	 * @param sqlSessionFactorys

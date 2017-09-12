@@ -8,8 +8,6 @@ import java.util.List;
  * 
  * @className	： MyBatisSql
  * @description	： TODO(描述这个类的作用)
- * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
- * @date		： Jan 26, 2016 4:46:53 PM
  * @version 	V1.0
  */
 public class MyBatisSQL {

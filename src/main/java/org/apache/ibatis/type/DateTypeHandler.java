@@ -25,11 +25,6 @@ import java.sql.SQLException;
  * 
  * @className: DateTypeHandler
  * @description: 将字符串格式的日期:<code>yyyy-mm-dd</code>转换为JDBC能够识别的类型。
- * @author : wandalong
- * @date : 上午11:19:14 2015-4-15
- * @modify by:
- * @modify date :
- * @modify description :
  */
 public class DateTypeHandler extends BaseTypeHandler<String> {
 

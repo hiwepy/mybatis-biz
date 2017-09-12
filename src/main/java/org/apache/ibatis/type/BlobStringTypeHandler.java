@@ -14,14 +14,10 @@ import org.apache.ibatis.type.MappedJdbcTypes;
 
 /**
  * 
- * *******************************************************************
  * @className	： BlobStringTypeHandler
  * @description	：自定义typehandler，解决mybatis存储blob字段后，出现乱码的问题 配置mapper.xml：
  * <result typeHandler="org.apache.ibatis.type.BlobStringTypeHandler"/>
- * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
- * @date		： 2017年5月9日 下午8:53:44
  * @version 	V1.0 
- * *******************************************************************
  */
 @MappedJdbcTypes(JdbcType.BLOB)
 public class BlobStringTypeHandler extends BaseTypeHandler<String> {// 指定字符集

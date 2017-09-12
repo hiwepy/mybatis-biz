@@ -104,16 +104,16 @@ public abstract class AbstractInterceptor implements Interceptor {
 	/**
 	 * 
 	 * @description	： （Executor，ParameterHandler，ResultSetHandler，StatementHandler）等对象
-	 *<pre>
+	 * <pre>
 	 *	创建顺序是:Executor，StatementHandler，ParameterHandler，ResultSetHandler
 	 *	执行顺序是:Executor，ParameterHandler，StatementHandler，ResultSetHandler
-	 *</pre>
-	 * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
-	 * @date 		：Nov 3, 2016 11:40:12 AM
+	 * </pre>
+	 * @author 		：<a href="https://github.com/vindell">vindell</a>
+	 * @date 		：2017年9月12日 下午11:35:29
 	 * @param invocation
 	 * @return
-	 * @see org.apache.ibatis.session.Configuration
 	 * @throws Throwable
+	 * @see org.apache.ibatis.session.Configuration
 	 */
 	public Object intercept(Invocation invocation) throws Throwable {
 		try {

@@ -24,14 +24,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 
- * *******************************************************************
  * @className	： MybatisConfiguration
  * @description	： TODO(描述这个类的作用)
- * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
- * @date		： 2017年5月11日 下午9:54:31
- * @version 	V1.0 
+ * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @date		： 2017年9月12日 下午11:34:43
+ * @version 	V1.0
  * @see org.apache.ibatis.builder.xml.XMLConfigBuilder
- * *******************************************************************
  */
 public class MybatisConfiguration extends Configuration {
 

@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 
- * @className	： AutoMapperSQLlInjector
- * @description	：SQL 自动注入器
- * @author 		： wandalong
- * @date		： Jan 26, 2016 2:23:10 PM
+ * @className	： AnnotationMapperInjector
+ * @description	： SQL 自动注入器
+ * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @date		： 2017年9月12日 下午11:35:58
  * @version 	V1.0
  */
 public class AnnotationMapperInjector {

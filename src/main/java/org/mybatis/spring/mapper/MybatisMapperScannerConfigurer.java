@@ -98,7 +98,6 @@ import org.springframework.util.StringUtils;
  *  拷贝MapperScannerConfigurer对象，扩展postProcessBeanDefinitionRegistry方法，
  *  详见313行
  *  </p>
- * @author wandalong
  * @see MapperFactoryBean
  * @see ClassPathMapperScanner
  * @see MapperScannerConfigurer

@@ -21,26 +21,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.ibatis.injector.metadata.ColumnMetadata;
-import org.apache.ibatis.injector.metadata.TableMetadata;
-import org.apache.ibatis.session.enums.ColumnStrategy;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Simple utility class for working with the reflection API and handling
@@ -61,28 +49,13 @@ public abstract class ReflectionUtils {
 	protected static Logger LOG = LoggerFactory.getLogger(ReflectionUtils.class);
 
 	/**
-	 * Naming prefix for CGLIB-renamed methods.
-	 * @see #isCglibRenamedMethod
-	 */
-	private static final String CGLIB_RENAMED_METHOD_PREFIX = "CGLIB$";
-
-	/**
-	 * Cache for {@link Class#getDeclaredMethods()}, allowing for fast iteration.
-	 */
-	private static final Map<Class<?>, Method[]> declaredMethodsCache = new ConcurrentReferenceHashMap<Class<?>, Method[]>(256);
-
-
-	/**
 	 * 
-	 *@描述		：循环向上转型, 获取对象的DeclaredField,	 并强制设置为可访问
-	 *@创建人	: wandalong
-	 *@创建时间	: Mar 11, 20163:31:58 PM
-	 *@param target
-	 *@param name
-	 *@return
-	 *@修改人	: 
-	 *@修改时间	: 
-	 *@修改描述	:
+	 * @description	： 循环向上转型, 获取对象的DeclaredField,并强制设置为可访问
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @date 		：2017年9月12日 下午10:57:19
+	 * @param target
+	 * @param name
+	 * @return
 	 */
 	public static Field getAccessibleField(Object target, String name) {
 		Field field = getField(target, name);
@@ -115,8 +88,6 @@ public abstract class ReflectionUtils {
 	 * @return the corresponding Field object, or {@code null} if not found
 	 */
 	public static Field getField(Class<?> clazz, String name, Class<?> type) {
-		Assert.notNull(clazz, "Class must not be null");
-		Assert.isTrue(name != null || type != null, "Either name or type of the field must be specified");
 		Class<?> searchType = clazz;
 		while (!Object.class.equals(searchType) && searchType != null) {
 			Field[] fields = searchType.getDeclaredFields();
@@ -132,19 +103,14 @@ public abstract class ReflectionUtils {
 	
 	/**
 	 * 
-	 *@描述		：获取target对象名称为name的Field
-	 *@创建人	: wandalong
-	 *@创建时间	: Mar 11, 20163:25:11 PM
-	 *@param target
-	 *@param name
-	 *@return
-	 *@修改人	: 
-	 *@修改时间	: 
-	 *@修改描述	:
+	 * @description	： 获取target对象名称为name的Field
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @date 		：2017年9月12日 下午10:57:31
+	 * @param target
+	 * @param name
+	 * @return
 	 */
 	public static Field getField(Object target, String name) {
-		Assert.notNull(target, "target must not be null");
-		Assert.isTrue(name != null, "Either name of the field must be specified");
 		for (Class<?> superClass = target.getClass(); superClass != Object.class; superClass = superClass.getSuperclass()) {
 			try {
 				return superClass.getDeclaredField(name);
@@ -206,7 +172,7 @@ public abstract class ReflectionUtils {
 	 * @param target the target object from which to get the field
 	 * @return the field's current value
 	 */
-	public static Object getField(Field field, Object target) {
+	public static Object getField(Object target,Field field) {
 		try {
 			Object result = null;
 			if (field.isAccessible()) {
@@ -227,15 +193,12 @@ public abstract class ReflectionUtils {
 	
 	/**
 	 * 
-	 *@描述		：直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数
-	 *@创建人	: wandalong
-	 *@创建时间	: Mar 11, 20163:25:52 PM
-	 *@param fieldName
-	 *@param target
-	 *@return
-	 *@修改人	: 
-	 *@修改时间	: 
-	 *@修改描述	:
+	 * @description	： 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @date 		：2017年9月12日 下午10:57:40
+	 * @param fieldName
+	 * @param target
+	 * @return
 	 */
 	public static Object getField(String fieldName,Object target) {
 		Field field = getField(target, fieldName);
@@ -268,66 +231,32 @@ public abstract class ReflectionUtils {
 	public static Method getMethod(Class<?> clazz, String name) {
 		return getMethod(clazz, name, new Class<?>[0]);
 	}
-
-	/**
-	 * Attempt to get a {@link Method} on the supplied class with the supplied name
-	 * and parameter types. Searches all superclasses up to {@code Object}.
-	 * <p>Returns {@code null} if no {@link Method} can be found.
-	 * @param clazz the class to introspect
-	 * @param name the name of the method
-	 * @param paramTypes the parameter types of the method
-	 * (may be {@code null} to indicate any signature)
-	 * @return the Method object, or {@code null} if none found
-	 */
-	public static Method getMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
-		Assert.notNull(clazz, "Class must not be null");
-		Assert.notNull(name, "Method name must not be null");
-		Class<?> searchType = clazz;
-		while (searchType != null) {
-			Method[] methods = (searchType.isInterface() ? searchType.getMethods() : getDeclaredMethods(searchType));
-			for (Method method : methods) {
-				if (name.equals(method.getName()) && (paramTypes == null || Arrays.equals(paramTypes, method.getParameterTypes()))) {
-					return method;
-				}
-			}
-			searchType = searchType.getSuperclass();
-		}
-		return null;
-	}
 	
 	/**
 	 * 
-	 *@描述		：循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.如向上转型到Object仍无法找到, 返回null.
-	 *@创建人	: wandalong
-	 *@创建时间	: Mar 4, 20163:23:45 PM
-	 *@param target
-	 *@param name
-	 *@param paramTypes
-	 *@return
-	 *@修改人	: 
-	 *@修改时间	: 
-	 *@修改描述	:
+	 * @description	： 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.如向上转型到Object仍无法找到, 返回null.
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @date 		：2017年9月12日 下午10:58:06
+	 * @param target
+	 * @param name
+	 * @param paramTypes
+	 * @return
 	 */
 	public static Method getMethod(Object target,String name,Class<?>... paramTypes) {
-		Assert.notNull(target, "target must not be null ");
 		return getMethod(target.getClass(),name,paramTypes);
 	}
 	
 	/**
 	 * 
-	 *@描述		：循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.
-	 *@创建人	: wandalong
-	 *@创建时间	: Mar 11, 20163:42:51 PM
-	 *@param target
-	 *@param name
-	 *@param paramTypes
-	 *@return
-	 *@修改人	: 
-	 *@修改时间	: 
-	 *@修改描述	:
+	 * @description	： 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @date 		：2017年9月12日 下午10:57:57
+	 * @param target
+	 * @param name
+	 * @param paramTypes
+	 * @return
 	 */
 	public static Method getAccessibleMethod(Object target,String name,Class<?>... paramTypes ) {
-		Assert.notNull(target, "target must not be null ");
 		Method method =  getMethod(target.getClass(),name,paramTypes);
 		if(method != null){
 			method.setAccessible(true);
@@ -540,7 +469,6 @@ public abstract class ReflectionUtils {
 	 * {@code false} if it needs to be wrapped
 	 */
 	public static boolean declaresException(Method method, Class<?> exceptionType) {
-		Assert.notNull(method, "Method must not be null");
 		Class<?>[] declaredExceptions = method.getExceptionTypes();
 		for (Class<?> declaredException : declaredExceptions) {
 			if (declaredException.isAssignableFrom(exceptionType)) {
@@ -589,15 +517,12 @@ public abstract class ReflectionUtils {
 	
 	/**
 	 * 
-	 *@描述		：判断clazz类是否实现了某个接口
-	 *@创建人	: wandalong
-	 *@创建时间	: Mar 11, 20163:22:22 PM
-	 *@param clazz
-	 *@param targetInterface : 是否实现的接口
-	 *@return
-	 *@修改人	: 
-	 *@修改时间	: 
-	 *@修改描述	:
+	 * @description	： 判断clazz类是否实现了某个接口
+	 * @author 		： <a href="https://github.com/vindell">vindell</a>
+	 * @date 		：2017年9月12日 下午10:57:49
+	 * @param clazz
+	 * @param targetInterface
+	 * @return
 	 */
 	public static boolean isInterface(Class<?> clazz, Class<?> targetInterface) {
 		Class<?>[] face = clazz.getInterfaces();
@@ -635,26 +560,6 @@ public abstract class ReflectionUtils {
 		catch (Exception ex) {
 			return false;
 		}
-	}
-
-	/**
-	 * Determine whether the given method is a CGLIB 'renamed' method,
-	 * following the pattern "CGLIB$methodName$0".
-	 * @param renamedMethod the method to check
-	 * @see org.springframework.enhanced.cglib.proxy.Enhancer#rename
-	 */
-	public static boolean isCglibRenamedMethod(Method renamedMethod) {
-		String name = renamedMethod.getName();
-		if (name.startsWith(CGLIB_RENAMED_METHOD_PREFIX)) {
-			int i = name.length() - 1;
-			while (i >= 0 && Character.isDigit(name.charAt(i))) {
-				i--;
-			}
-			return ((i > CGLIB_RENAMED_METHOD_PREFIX.length()) &&
-						(i < name.length() - 1) &&
-						(name.charAt(i) == '$'));
-		}
-		return false;
 	}
 
 	/**
@@ -703,52 +608,6 @@ public abstract class ReflectionUtils {
 	}
 
 	/**
-	 * Perform the given callback operation on all matching methods of the given
-	 * class and superclasses.
-	 * <p>The same named method occurring on subclass and superclass will appear
-	 * twice, unless excluded by a {@link MethodFilter}.
-	 * @param clazz the class to introspect
-	 * @param mc the callback to invoke for each method
-	 * @see #doWithMethods(Class, MethodCallback, MethodFilter)
-	 */
-	public static void doWithMethods(Class<?> clazz, MethodCallback mc) {
-		doWithMethods(clazz, mc, null);
-	}
-
-	/**
-	 * Perform the given callback operation on all matching methods of the given
-	 * class and superclasses (or given interface and super-interfaces).
-	 * <p>The same named method occurring on subclass and superclass will appear
-	 * twice, unless excluded by the specified {@link MethodFilter}.
-	 * @param clazz the class to introspect
-	 * @param mc the callback to invoke for each method
-	 * @param mf the filter that determines the methods to apply the callback to
-	 */
-	public static void doWithMethods(Class<?> clazz, MethodCallback mc, MethodFilter mf) {
-		// Keep backing up the inheritance hierarchy.
-		Method[] methods = getDeclaredMethods(clazz);
-		for (Method method : methods) {
-			if (mf != null && !mf.matches(method)) {
-				continue;
-			}
-			try {
-				mc.doWith(method);
-			}
-			catch (IllegalAccessException ex) {
-				throw new IllegalStateException("Not allowed to access method '" + method.getName() + "': " + ex);
-			}
-		}
-		if (clazz.getSuperclass() != null) {
-			doWithMethods(clazz.getSuperclass(), mc, mf);
-		}
-		else if (clazz.isInterface()) {
-			for (Class<?> superIfc : clazz.getInterfaces()) {
-				doWithMethods(superIfc, mc, mf);
-			}
-		}
-	}
-	
-	/**
 	 * Get all declared fields on the leaf class and all superclasses.
 	 * Leaf class fields are included first.
 	 * @param leafClass the class to introspect
@@ -756,76 +615,12 @@ public abstract class ReflectionUtils {
 	public static Field[] getAllDeclaredFields(Class<?> leafClass){
 		final List<Field> fields = new ArrayList<Field>(32);
 		doWithFields(leafClass,new FieldCallback(){
+			@Override
 			public void doWith(Field field) throws IllegalArgumentException,IllegalAccessException {
 				fields.add(field);
 			}
 		});
 		return fields.toArray(new Field[fields.size()]);
-	}
-
-	/**
-	 * Get all declared methods on the leaf class and all superclasses.
-	 * Leaf class methods are included first.
-	 * @param leafClass the class to introspect
-	 */
-	public static Method[] getAllDeclaredMethods(Class<?> leafClass) {
-		final List<Method> methods = new ArrayList<Method>(32);
-		doWithMethods(leafClass, new MethodCallback() {
-			public void doWith(Method method) {
-				methods.add(method);
-			}
-		});
-		return methods.toArray(new Method[methods.size()]);
-	}
-
-	/**
-	 * Get the unique set of declared methods on the leaf class and all superclasses.
-	 * Leaf class methods are included first and while traversing the superclass hierarchy
-	 * any methods found with signatures matching a method already included are filtered out.
-	 * @param leafClass the class to introspect
-	 */
-	public static Method[] getUniqueDeclaredMethods(Class<?> leafClass) {
-		final List<Method> methods = new ArrayList<Method>(32);
-		doWithMethods(leafClass, new MethodCallback() {
-			public void doWith(Method method) {
-				boolean knownSignature = false;
-				Method methodBeingOverriddenWithCovariantReturnType = null;
-				for (Method existingMethod : methods) {
-					if (method.getName().equals(existingMethod.getName()) &&
-							Arrays.equals(method.getParameterTypes(), existingMethod.getParameterTypes())) {
-						// Is this a covariant return type situation?
-						if (existingMethod.getReturnType() != method.getReturnType() &&
-								existingMethod.getReturnType().isAssignableFrom(method.getReturnType())) {
-							methodBeingOverriddenWithCovariantReturnType = existingMethod;
-						}
-						else {
-							knownSignature = true;
-						}
-						break;
-					}
-				}
-				if (methodBeingOverriddenWithCovariantReturnType != null) {
-					methods.remove(methodBeingOverriddenWithCovariantReturnType);
-				}
-				if (!knownSignature && !isCglibRenamedMethod(method)) {
-					methods.add(method);
-				}
-			}
-		});
-		return methods.toArray(new Method[methods.size()]);
-	}
-
-	/**
-	 * This variant retrieves {@link Class#getDeclaredMethods()} from a local cache
-	 * in order to avoid the JVM's SecurityManager check and defensive array copying.
-	 */
-	private static Method[] getDeclaredMethods(Class<?> clazz) {
-		Method[] result = declaredMethodsCache.get(clazz);
-		if (result == null) {
-			result = clazz.getDeclaredMethods();
-			declaredMethodsCache.put(clazz, result);
-		}
-		return result;
 	}
 
 	/**
@@ -883,6 +678,7 @@ public abstract class ReflectionUtils {
 					"] must be same or subclass as source class [" + src.getClass().getName() + "]");
 		}
 		doWithFields(src.getClass(), new FieldCallback() {
+			@Override
 			public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
 				makeAccessible(field);
 				Object srcValue = field.get(src);
@@ -949,6 +745,7 @@ public abstract class ReflectionUtils {
 	 */
 	public static FieldFilter COPYABLE_FIELDS = new FieldFilter() {
 
+		@Override
 		public boolean matches(Field field) {
 			return !(Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers()));
 		}
@@ -960,6 +757,7 @@ public abstract class ReflectionUtils {
 	 */
 	public static MethodFilter NON_BRIDGED_METHODS = new MethodFilter() {
 
+		@Override
 		public boolean matches(Method method) {
 			return !method.isBridge();
 		}
@@ -972,309 +770,12 @@ public abstract class ReflectionUtils {
 	 */
 	public static MethodFilter USER_DECLARED_METHODS = new MethodFilter() {
 
+		@Override
 		public boolean matches(Method method) {
 			return (!method.isBridge() && method.getDeclaringClass() != Object.class);
 		}
 	};
 	
-	/**
-	 * 提取集合中的对象的属性(通过getter函数), 组合成List.
-	 * @param collection 来源集合.
-	 * @param propertyName 要提取的属性名.
-	 */
-	@SuppressWarnings("unchecked")
-	public static List fetchElementPropertyToList(Collection collection,String propertyName) {
-		List list = new ArrayList();
 
-		try {
-			for (Object obj : collection) {
-				list.add(PropertyUtils.getProperty(obj, propertyName));
-			}
-		} catch (Exception e) {
-			throw new IllegalStateException(e);
-		}
-		return list;
-	}
- 
-	
-	/**********************************************/
-	/**
-	 * 获取obj对象fieldName的Field
-	 * @param obj 对象
-	 * @param fieldName 属性名 
-	 * @return Field
-	 */
-	public static Field getFieldByFieldName(Object obj, String fieldName) {
-		for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass
-				.getSuperclass()) {
-			try {
-				return superClass.getDeclaredField(fieldName);
-			} catch (NoSuchFieldException e) {
-			}
-		}
-		return null;
-	}
-
-	
-	
-	/**
-	 * 获取obj对象fieldName的属性值
-	 * @param obj 对象
-	 * @param fieldName 属性名
-	 * @return 属性值
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 */
-	public static Object getValueByFieldName(Object obj, String fieldName)
-			throws SecurityException, NoSuchFieldException,
-			IllegalArgumentException, IllegalAccessException {
-		Field field = getFieldByFieldName(obj, fieldName);
-		Object value = null;
-		if(field!=null){
-			if (field.isAccessible()) {
-				value = field.get(obj);
-			} else {
-				field.setAccessible(true);
-				value = field.get(obj);
-				field.setAccessible(false);
-			}
-		}
-		return value;
-	}
-
-	/**
-	 * 设置obj对象fieldName的属性值
-	 * @param obj 对象
-	 * @param fieldName 属性名
-	 * @param value 属性值
-	 * @throws SecurityException
-	 * @throws NoSuchFieldException
-	 * @throws IllegalArgumentException
-	 * @throws IllegalAccessException
-	 */
-	public static void setValueByFieldName(Object obj, String fieldName,
-			Object value) throws SecurityException, NoSuchFieldException,
-			IllegalArgumentException, IllegalAccessException {
-		Field field = obj.getClass().getDeclaredField(fieldName);
-		if (field.isAccessible()) {
-			field.set(obj, value);
-		} else {
-			field.setAccessible(true);
-			field.set(obj, value);
-			field.setAccessible(false);
-		}
-	}
-	
-	/**
-	 * 
-	 * <p>方法说明：判断对象是否拥有某属性<p>
-	 * <p>作者：<a href="mailto:waterlord@vip.qq.com">Penghui.Qu[445]<a><p>
-	 * <p>时间：2016年9月22日下午2:11:42<p>
-	 * @param obj
-	 * @param property
-	 * @return
-	 */
-	public static boolean hasProperty(final Object obj,String property){
-		try {
-			return PropertyUtils.getProperty(obj, property)!= null;
-		} catch (Exception e) {
-			LOG.error("", e);
-		}
-		return false;
-	}
-	
-	/**********************************************/
-	
-	/**
-	 * <p>
-	 * 反射 method 方法名，例如 getId
-	 * </p>
-	 *
-	 * @param field
-	 * @param str
-	 *            属性字符串内容
-	 * @return
-	 */
-	public static String getMethodCapitalize(Field field, final String str) {
-		Class<?> fieldType = field.getType();
-		String concatstr;
-		if (Boolean.class.equals(fieldType) || boolean.class.equals(fieldType)) {
-			concatstr = "is";
-		} else {
-			concatstr = "get";
-		}
-		return StringUtils.concatCapitalize(concatstr, str);
-	}
-
-	/**
-	 * 获取 public get方法的值
-	 *
-	 * @param cls
-	 * @param entity
-	 *            实体
-	 * @param str
-	 *            属性字符串内容
-	 * @return Object
-	 */
-	public static Object getMethodValue(Class<?> cls, Object entity, String str) {
-		Map<String, Field> fieldMaps = getFieldMap(cls);
-		try {
-			if (MapUtils.isEmpty(fieldMaps)) {
-				throw new IllegalArgumentException(
-						String.format("Error: NoSuchField in %s for %s.  Cause:", cls.getSimpleName(), str));
-			}
-			Method method = cls.getMethod(getMethodCapitalize(fieldMaps.get(str), str));
-			return method.invoke(entity);
-		} catch (NoSuchMethodException e) {
-			throw new IllegalArgumentException(String.format("Error: NoSuchMethod in %s.  Cause:", cls.getSimpleName()) + e);
-		} catch (IllegalAccessException e) {
-			throw new IllegalArgumentException(String.format("Error: Cannot execute a private method. in %s.  Cause:",
-					cls.getSimpleName())
-					+ e);
-		} catch (InvocationTargetException e) {
-			throw new IllegalArgumentException("Error: InvocationTargetException on getMethodValue.  Cause:" + e);
-		}
-	}
-
-	/**
-	 * 获取 public get方法的值
-	 *
-	 * @param entity
-	 *            实体
-	 * @param str
-	 *            属性字符串内容
-	 * @return Object
-	 */
-	public static Object getMethodValue(Object entity, String str) {
-		if (null == entity) {
-			return null;
-		}
-		return getMethodValue(entity.getClass(), entity, str);
-	}
-
-	/**
-	 * 调用对象的get方法检查对象所有属性是否为null
-	 *
-	 * @param bean
-	 *            检查对象
-	 * @return boolean true对象所有属性不为null,false对象所有属性为null
-	 */
-	public static boolean checkFieldValueNotNull(Object bean) {
-		if (null == bean) {
-			return false;
-		}
-		Class<?> cls = bean.getClass();
-		TableMetadata tableInfo = TableMetadataUtils.getTableMetadata(cls);
-		if (null == tableInfo) {
-			throw new IllegalArgumentException(String.format("Error: Could Not find %s in TableInfo Cache. ", cls.getSimpleName()));
-		}
-		boolean result = false;
-		List<ColumnMetadata> fieldList = tableInfo.getFieldList();
-		for (ColumnMetadata tableFieldInfo : fieldList) {
-			ColumnStrategy fieldStrategy = tableFieldInfo.getStrategy();
-			Object val = getMethodValue(cls, bean, tableFieldInfo.getProperty());
-			if (ColumnStrategy.NOT_EMPTY.equals(fieldStrategy)) {
-				if (StringUtils.checkValNotNull(val)) {
-					result = true;
-					break;
-				}
-			} else {
-				if (null != val) {
-					result = true;
-					break;
-				}
-			}
-
-		}
-		return result;
-	}
-
-	/**
-	 * 反射对象获取泛型
-	 *
-	 * @param clazz
-	 *            对象
-	 * @param index
-	 *            泛型所在位置
-	 * @return Class
-	 */
-	@SuppressWarnings("rawtypes")
-	public static Class getSuperClassGenricType(final Class clazz, final int index) {
-
-		Type genType = clazz.getGenericSuperclass();
-
-		if (!(genType instanceof ParameterizedType)) {
-			LOG.warn(String.format("Warn: %s's superclass not ParameterizedType", clazz.getSimpleName()));
-			return Object.class;
-		}
-
-		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
-
-		if (index >= params.length || index < 0) {
-			LOG.warn(String.format("Warn: Index: %s, Size of %s's Parameterized Type: %s .", index, clazz.getSimpleName(),
-					params.length));
-			return Object.class;
-		}
-		if (!(params[index] instanceof Class)) {
-			LOG.warn(String.format("Warn: %s not set the actual class on superclass generic parameter", clazz.getSimpleName()));
-			return Object.class;
-		}
-
-		return (Class) params[index];
-	}
-
-	/**
-	 * 获取该类的所有属性列表
-	 *
-	 * @param clazz
-	 *            反射类
-	 * @return
-	 */
-	public static Map<String, Field> getFieldMap(Class<?> clazz) {
-		List<Field> fieldList = getFieldList(clazz);
-		Map<String, Field> fieldMap = Collections.emptyMap();
-		if (CollectionUtils.isNotEmpty(fieldList)) {
-			fieldMap = new LinkedHashMap<String, Field>();
-			for (Field field : fieldList) {
-				fieldMap.put(field.getName(), field);
-			}
-		}
-		return fieldMap;
-	}
-
-	/**
-	 * 获取该类的所有属性列表
-	 *
-	 * @param clazz
-	 *            反射类
-	 * @return
-	 */
-	public static List<Field> getFieldList(Class<?> clazz) {
-		if (null == clazz) {
-			return null;
-		}
-		List<Field> fieldList = new LinkedList<Field>();
-		Field[] fields = clazz.getDeclaredFields();
-		for (Field field : fields) {
-			/* 过滤静态属性 */
-			if (Modifier.isStatic(field.getModifiers())) {
-				continue;
-			}
-			/* 过滤 transient关键字修饰的属性 */
-			if (Modifier.isTransient(field.getModifiers())) {
-				continue;
-			}
-			fieldList.add(field);
-		}
-		/* 处理父类字段 */
-		Class<?> superClass = clazz.getSuperclass();
-		if (superClass.equals(Object.class)) {
-			return fieldList;
-		}
-		fieldList.addAll(getFieldList(superClass));
-		return fieldList;
-	}
 	
 }

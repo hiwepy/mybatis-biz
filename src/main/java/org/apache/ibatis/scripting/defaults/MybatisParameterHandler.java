@@ -38,20 +38,18 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 
- *@类名称	: MybatisParameterHandler.java
- *@类描述	： 对SQL参数(?)设值
- *<pre>
+ * @className	： MybatisParameterHandler
+ * @description	：对SQL参数(?)设值
+ * <pre>
  *	通过mappedStatement、参数对象page和BoundSql对象countBoundSql建立一个用于设定参数的ParameterHandler对象
  *	ParameterHandler parameterHandler = new DefaultParameterHandler(mappedStatement, parameterObject, boundSql);  
  *	 通过parameterHandler给PreparedStatement对象设置参数
  *	parameterHandler.setParameters(pstmt);
- *</pre>
- *@创建人	：wandalong
- *@创建时间	：Aug 25, 2016 8:46:39 AM
- *@修改人	：
- *@修改时间	：
- *@版本号	:v1.0
- *@see org.apache.ibatis.scripting.defaults.DefaultParameterHandler
+ * </pre>
+ * @see org.apache.ibatis.scripting.defaults.DefaultParameterHandler
+ * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @date		： 2017年9月12日 下午11:29:57
+ * @version 	V1.0
  */
 @SuppressWarnings({"rawtypes","unchecked"})
 public class MybatisParameterHandler implements ParameterHandler {

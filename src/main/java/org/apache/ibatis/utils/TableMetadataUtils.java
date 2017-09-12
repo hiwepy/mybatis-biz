@@ -26,9 +26,9 @@ import org.slf4j.LoggerFactory;
 /**
  * 
  * @className	： TableMetadataUtils
- * @description	：实体类反射表辅助类
- * @author 		： <a href="mailto:hnxyhcwdl1003@163.com">wandalong</a>
- * @date		： Jan 26, 2016 3:12:35 PM
+ * @description	： 实体类反射表辅助类
+ * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @date		： 2017年9月12日 下午11:30:26
  * @version 	V1.0
  */
 public class TableMetadataUtils {
