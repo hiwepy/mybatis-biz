@@ -53,8 +53,14 @@ public class BeanMethodDefinitionFactory {
 	
 	/**
 	 * String mappedStatementId = className + "." + method.getName();
+	 * 
+	 * // 获取对应的BoundSql，这个BoundSql其实跟我们利用StatementHandler获取到的BoundSql是同一个对象。
+	 *  		BoundSql boundSql = metaStatementHandler.getBoundSql();
+	 * 		MetaObject metaBoundSql = MetaObjectUtils.forObject(boundSql);
+	 * 		
+	 * 		boundSql.getParameterObject()
 	 */
-	public static Method getMethodDefinition(String mappedStatementId) {
+	public static Method getMethodDefinition(String mappedStatementId, Class<?>... paramTypes) {
 		int index = mappedStatementId.lastIndexOf(".");
 		//类名称
 		String className = mappedStatementId.substring(0, index);
@@ -62,10 +68,11 @@ public class BeanMethodDefinitionFactory {
 		String methodName = mappedStatementId.substring(index + 1);
 		
 		BeanMethodDefinition definition = getBeanMethodDefinition(className);
+		
 		if(definition == null){
 			return null;
 		}
-		return definition.getMethod(methodName);
+		return definition.getMethod(methodName, paramTypes);
 	}
 	
 	

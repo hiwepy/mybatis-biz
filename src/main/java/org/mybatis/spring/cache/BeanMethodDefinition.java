@@ -20,6 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.util.DigestUtils;
+import org.springframework.util.ReflectionUtils;
+
 
 public class BeanMethodDefinition {
 
@@ -58,17 +61,26 @@ public class BeanMethodDefinition {
 		return beanClassName;
 	}
 
-	public Method getMethod(String methodName) {
-		String uid = getBeanClassName() + "." + methodName;
+	public Method getMethod(String methodName, Class<?>... paramTypes) {
+		StringBuilder builder = new StringBuilder(getBeanClassName()).append(".").append(methodName);
+		builder.append("[");
+		for (Class<?> paramType : paramTypes) {
+			builder.append(".").append(paramType.getName());
+		}
+		builder.append("]");
+		String uid = DigestUtils.md5DigestAsHex(builder.toString().getBytes());
 		Method ret = COMPLIED_METHODS.get(uid);
 		if (ret != null) {
 			return ret;
 		}
 		synchronized (beanClass) {
-			//查找指定的方法
-			for (Class<?> superClass = beanClass; superClass != Object.class && superClass != null; superClass = superClass.getSuperclass()) {
-				for (Method method : superClass.getDeclaredMethods()) {
-					if(method.getName().equals(methodName) ){
+			
+			// 查找对应参数类型方法
+			Class<?> searchType = beanClass;
+			while (searchType != null) {
+				Method[] methods = (searchType.isInterface() ? searchType.getMethods() : ReflectionUtils.getAllDeclaredMethods(searchType));
+				for (Method method : methods) {
+					if (methodName.equals(method.getName()) && (paramTypes == null || equals(paramTypes, method.getParameterTypes()))) {
 						ret = method;
 						Method existing = COMPLIED_METHODS.putIfAbsent(uid, ret);
 						if (existing != null) {
@@ -77,12 +89,36 @@ public class BeanMethodDefinition {
 						return ret;
 					}
 				}
+				searchType = searchType.getSuperclass();
 			}
+			
 		}
+		
 		return ret;
 	}
 	
-	
+	public boolean equals(Class<?>[] a, Class<?>[] a2) {
+        if (a==a2)
+            return true;
+        if (a==null || a2==null)
+            return false;
+
+        int length = a.length;
+        if (a2.length != length)
+            return false;
+
+        for (int i=0; i<length; i++) {
+        	Class<?> class1 = a[i];
+        	Class<?> class2 = a2[i];
+        	
+            if (!(class1==null ? class2==null : (class1.equals(class2) || class2.isAssignableFrom(class1)))){
+            	 return false;
+            }
+               
+        }
+
+        return true;
+    }
 	
 	
 
