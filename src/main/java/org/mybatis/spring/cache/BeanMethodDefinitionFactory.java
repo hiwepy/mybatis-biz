@@ -51,6 +51,10 @@ public class BeanMethodDefinitionFactory {
 		return definition.getBeanDefinition();
 	}
 	
+	public static Method getMethodDefinition(String mappedStatementId) {
+		return getMethodDefinition(mappedStatementId, new Class<?>[0]);
+	}
+	
 	/**
 	 * String mappedStatementId = className + "." + method.getName();
 	 * 

@@ -19,6 +19,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.ibatis.utils.ObjectUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ReflectionUtils;
@@ -63,11 +64,13 @@ public class BeanMethodDefinition {
 
 	public Method getMethod(String methodName, Class<?>... paramTypes) {
 		StringBuilder builder = new StringBuilder(getBeanClassName()).append(".").append(methodName);
-		builder.append("[");
-		for (Class<?> paramType : paramTypes) {
-			builder.append(".").append(paramType.getName());
+		if(!ObjectUtils.isEmpty(paramTypes)){
+			builder.append("[");
+			for (Class<?> paramType : paramTypes) {
+				builder.append(".").append(paramType.getName());
+			}
+			builder.append("]");
 		}
-		builder.append("]");
 		String uid = DigestUtils.md5DigestAsHex(builder.toString().getBytes());
 		Method ret = COMPLIED_METHODS.get(uid);
 		if (ret != null) {
@@ -80,7 +83,7 @@ public class BeanMethodDefinition {
 			while (searchType != null) {
 				Method[] methods = (searchType.isInterface() ? searchType.getMethods() : ReflectionUtils.getAllDeclaredMethods(searchType));
 				for (Method method : methods) {
-					if (methodName.equals(method.getName()) && (paramTypes == null || equals(paramTypes, method.getParameterTypes()))) {
+					if (methodName.equals(method.getName()) && (ObjectUtils.isEmpty(paramTypes) || equals(paramTypes, method.getParameterTypes()))) {
 						ret = method;
 						Method existing = COMPLIED_METHODS.putIfAbsent(uid, ret);
 						if (existing != null) {
