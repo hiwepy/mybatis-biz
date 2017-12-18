@@ -62,7 +62,7 @@ public class BeanMethodDefinition {
 		return beanClassName;
 	}
 
-	public Method getMethod(String methodName, Class<?>... paramTypes) {
+	public Method getMethod(String methodName, Class<?>[] paramTypes) {
 		StringBuilder builder = new StringBuilder(getBeanClassName()).append(".").append(methodName);
 		if(!ObjectUtils.isEmpty(paramTypes)){
 			builder.append("[");

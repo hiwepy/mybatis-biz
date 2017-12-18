@@ -52,7 +52,7 @@ public class BeanMethodDefinitionFactory {
 	}
 	
 	public static Method getMethodDefinition(String mappedStatementId) {
-		return getMethodDefinition(mappedStatementId, new Class<?>[0]);
+		return getMethodDefinition(mappedStatementId, null);
 	}
 	
 	/**
@@ -64,7 +64,7 @@ public class BeanMethodDefinitionFactory {
 	 * 		
 	 * 		boundSql.getParameterObject()
 	 */
-	public static Method getMethodDefinition(String mappedStatementId, Class<?>... paramTypes) {
+	public static Method getMethodDefinition(String mappedStatementId, Class<?>[] paramTypes) {
 		int index = mappedStatementId.lastIndexOf(".");
 		//类名称
 		String className = mappedStatementId.substring(0, index);

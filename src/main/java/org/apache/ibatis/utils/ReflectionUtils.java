@@ -774,6 +774,11 @@ public abstract class ReflectionUtils {
 			return (!method.isBridge() && method.getDeclaringClass() != Object.class);
 		}
 	};
+
+	public static boolean checkFieldValueNotNull(Object entity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 
 	
