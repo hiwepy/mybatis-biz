@@ -29,9 +29,9 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.apache.ibatis.utils.MetaObjectUtils;
-import org.apache.ibatis.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 public class DefaultCacheKeyHandler implements CacheKeyHandler {
 	

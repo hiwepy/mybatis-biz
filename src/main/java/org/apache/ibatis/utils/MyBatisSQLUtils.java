@@ -17,6 +17,7 @@ import org.apache.ibatis.scripting.xmltags.ForEachSqlNode;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandlerRegistry;
+import org.springframework.util.StringUtils;
 
 @SuppressWarnings("rawtypes")
 public class MyBatisSQLUtils {

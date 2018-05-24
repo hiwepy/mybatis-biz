@@ -3,6 +3,8 @@
 import java.util.Collection;
 import java.util.Map;
 
+import org.springframework.util.StringUtils;
+
 
  /**
   * Assertion utility class that assists in validating arguments.
@@ -169,7 +171,7 @@ import java.util.Map;
  	 * @param message the exception message to use if the assertion fails
  	 */
  	public static void doesNotContain(String textToSearch, String substring, String message) {
- 		if (StringUtils.isNotEmpty(textToSearch) && StringUtils.isNotEmpty(substring) &&
+ 		if (StringUtils.hasText(textToSearch) && StringUtils.hasText(substring) &&
  				textToSearch.indexOf(substring) != -1) {
  			throw new IllegalArgumentException(message);
  		}

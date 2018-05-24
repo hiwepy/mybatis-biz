@@ -4,9 +4,9 @@ import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 
-import org.apache.ibatis.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 /**
  * <p>
@@ -106,7 +106,7 @@ public class Sequence {
 		StringBuffer mpid = new StringBuffer();
 		mpid.append(datacenterId);
 		String name = ManagementFactory.getRuntimeMXBean().getName();
-		if (StringUtils.isNotEmpty(name)) {
+		if (StringUtils.hasText(name)) {
 			/*
 			 * GET jvmPid
 			 */

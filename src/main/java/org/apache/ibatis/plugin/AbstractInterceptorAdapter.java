@@ -25,12 +25,8 @@ import org.apache.ibatis.plugin.meta.MetaResultSetHandler;
 import org.apache.ibatis.plugin.meta.MetaStatementHandler;
 
 /**
- * 
- * @className	： AbstractInterceptorAdapter
- * @description	： Mybatis拦截器插件适配器: 执行顺序是: doExecutorIntercept，doParameterIntercept，doStatementIntercept，doResultSetIntercept
+ * Mybatis拦截器插件适配器: 执行顺序是: doExecutorIntercept，doParameterIntercept，doStatementIntercept，doResultSetIntercept
  * @author 		： <a href="https://github.com/vindell">vindell</a>
- * @date		： 2017年9月12日 下午11:35:00
- * @version 	V1.0
  */
 public abstract class AbstractInterceptorAdapter extends AbstractInterceptor {
 

@@ -16,13 +16,21 @@
 package org.mybatis.spring.cache;
 
 import java.lang.reflect.Method;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.ibatis.utils.MybatisUtils;
+import org.apache.ibatis.utils.ReflectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
 
 public class BeanMethodDefinitionFactory {
-
+	
+	private static final Logger LOG = LoggerFactory.getLogger(BeanMethodDefinitionFactory.class);
 	protected static final ConcurrentMap<String , BeanMethodDefinition> COMPLIED_BEAN_METHODS = new ConcurrentHashMap<String , BeanMethodDefinition>();
 	
 	public static BeanMethodDefinition getBeanMethodDefinition(String className) {
@@ -89,5 +97,28 @@ public class BeanMethodDefinitionFactory {
 		return ret;
 	}
 	
+	public static void setBeanDefinitions(BeanFactory beanFactory, Set<BeanDefinitionHolder> beanDefinitions) {
+		// 对扫描的Dao接口代理对象进行引用
+		for (BeanDefinitionHolder beanDefinitionHolder : beanDefinitions) {
+			try {
+				//获取Spring扫描注入对象的名称
+				String beanName = beanDefinitionHolder.getBeanName();
+				//获取代理对象
+				Object target = MybatisUtils.getTarget(beanFactory.getBean(beanName));
+				//获取对象代理接口类型
+				Class<?> beanClass = ((Class<?>) ReflectionUtils.getAccessibleField(target, "mapperInterface").get(target));
+				//获取接口类名称
+				String className = beanClass.getName();
+				//缓存对象引用
+				BeanMethodDefinition definition = new BeanMethodDefinition(beanName, 
+						beanDefinitionHolder.getAliases(), 
+						beanDefinitionHolder.getBeanDefinition(), 
+						beanClass);
+				BeanMethodDefinitionFactory.setBeanMethodDefinition(className, definition );
+			} catch (Exception e) {
+				LOG.error(e.getLocalizedMessage(),e);
+			}
+		}
+	}
 	
 }
