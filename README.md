@@ -1,4 +1,5 @@
-# mybatis-biz
-mybatis-biz
+# mybatis-dbperms
 
-参考 mybatis-plus 结合工作中遇到的问题，整理出的常用逻辑
+扩展mybatis实现基于注解的数据权限组件
+
+
