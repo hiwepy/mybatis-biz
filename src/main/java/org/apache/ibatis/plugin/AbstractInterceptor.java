@@ -15,6 +15,7 @@
  */
 package org.apache.ibatis.plugin;
 
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.apache.ibatis.builder.SqlSourceBuilder;
@@ -35,6 +36,9 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractInterceptor implements Interceptor {
 
 	protected static Logger LOG = LoggerFactory.getLogger(AbstractInterceptor.class);
+	
+	/* Context参数 */
+	protected HashMap<String,Object> extraContext = new HashMap<String,Object>();
 	
 	/**
 	 * <pre>
