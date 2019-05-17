@@ -22,9 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * 
- * @className: DateTypeHandler
- * @description: 将字符串格式的日期:<code>yyyy-mm-dd</code>转换为JDBC能够识别的类型。
+ * 将字符串格式的日期:<code>yyyy-mm-dd</code>转换为JDBC能够识别的类型。
  */
 public class DateTypeHandler extends BaseTypeHandler<String> {
 

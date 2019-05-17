@@ -373,6 +373,7 @@
 		<commons-collections4.version>4.1</commons-collections4.version>
 		<commons-lang3.version>3.7</commons-lang3.version>
 		<contiperf.version>2.3.4</contiperf.version>
+		<fastjson.version>1.2.58</fastjson.version>
 		<java.version>1.7</java.version>
 		<junit.version>4.12</junit.version>
 		<reflections.version>0.9.11</reflections.version>
@@ -440,6 +441,13 @@
 				<version>${commons-lang3.version}</version>
 			</dependency>
 			
+			<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>${fastjson.version}</version>
+			</dependency>
+			
 			<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
 			<dependency>
 			    <groupId>org.mybatis</groupId>
@@ -477,11 +485,15 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		
-		<!-- Compile dependencies -->
-		
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
