@@ -22,9 +22,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 /**
- * 
- * @className: TimestampTypeHanlder
- * @description: 将字符串格式的时间:<code>yyyy-mm-dd hh:mm:ss[.f...]</code>转换为JDBC能够识别的类型。
+ * 将字符串格式的时间:<code>yyyy-mm-dd hh:mm:ss[.f...]</code>转换为JDBC能够识别的类型。
  */
 public class TimestampTypeHanlder extends BaseTypeHandler<String> {
 

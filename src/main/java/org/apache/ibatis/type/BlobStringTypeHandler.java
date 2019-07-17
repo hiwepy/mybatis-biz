@@ -13,11 +13,9 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 
 /**
- * 
- * @className	： BlobStringTypeHandler
- * @description	：自定义typehandler，解决mybatis存储blob字段后，出现乱码的问题 配置mapper.xml：
+ * 自定义typehandler，解决mybatis存储blob字段后，出现乱码的问题 配置mapper.xml：
  * <result typeHandler="org.apache.ibatis.type.BlobStringTypeHandler"/>
- * @version 	V1.0 
+ * @author <a href="https://github.com/vindell">vindell</a>
  */
 @MappedJdbcTypes(JdbcType.BLOB)
 public class BlobStringTypeHandler extends BaseTypeHandler<String> {// 指定字符集

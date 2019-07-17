@@ -448,6 +448,13 @@
 				<version>${commons-lang3.version}</version>
 			</dependency>
 			
+			<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>fastjson</artifactId>
+				<version>${fastjson.version}</version>
+			</dependency>
+			
 			<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
 			<dependency>
 			    <groupId>org.mybatis</groupId>
@@ -488,8 +495,6 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- Compile dependencies -->
-		
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
@@ -498,6 +503,12 @@
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
