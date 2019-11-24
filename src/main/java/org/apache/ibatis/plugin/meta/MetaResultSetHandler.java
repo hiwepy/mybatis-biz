@@ -1,5 +1,13 @@
 package org.apache.ibatis.plugin.meta;
 
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Map.Entry;
+
+import org.apache.ibatis.binding.MapperMethod;
+import org.apache.ibatis.binding.MapperProxyFactory;
+import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
@@ -13,6 +21,7 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.apache.ibatis.utils.MetaObjectUtils;
+import org.springframework.util.StringUtils;
 
 public class MetaResultSetHandler {
 
@@ -20,6 +29,9 @@ public class MetaResultSetHandler {
 	protected Executor executor;
 	protected Configuration configuration;
 	protected MappedStatement mappedStatement;
+	protected MapperProxyFactory<?> mapperProxy;
+	protected MapperMethod mapperMethod;
+	protected Method method;
 	protected RowBounds rowBounds;
 	protected ParameterHandler parameterHandler;
 	protected ResultHandler<?> resultHandler;
@@ -28,8 +40,13 @@ public class MetaResultSetHandler {
 	protected ObjectFactory objectFactory;
 	protected ReflectorFactory reflectorFactory;
 	
-	public MetaResultSetHandler(MetaObject metaObject, Executor executor, Configuration configuration,
-			MappedStatement mappedStatement, RowBounds rowBounds,
+	public MetaResultSetHandler(MetaObject metaObject, Executor executor, 
+			Configuration configuration,
+			MappedStatement mappedStatement, 
+			MapperProxyFactory<?> mapperProxy,
+			MapperMethod mapperMethod,
+			Method method,
+			RowBounds rowBounds,
 			ParameterHandler parameterHandler, ResultHandler<?> resultHandler,
 			BoundSql boundSql, TypeHandlerRegistry typeHandlerRegistry,
 			ObjectFactory objectFactory, ReflectorFactory reflectorFactory) {
@@ -58,7 +75,27 @@ public class MetaResultSetHandler {
 		TypeHandlerRegistry typeHandlerRegistry = (TypeHandlerRegistry) metaObject.getValue("typeHandlerRegistry");
 		ObjectFactory objectFactory = (ObjectFactory) metaObject.getValue("objectFactory");
 		ReflectorFactory reflectorFactory = (ReflectorFactory) metaObject.getValue("reflectorFactory");
-		return new MetaResultSetHandler(metaObject, executor, configuration, mappedStatement, rowBounds, parameterHandler, resultHandler, boundSql, typeHandlerRegistry, objectFactory, reflectorFactory);
+		
+		// 
+		MapperRegistry mapperRegistry = configuration.getMapperRegistry();
+		Optional<Class<?>> firstMapper  = mapperRegistry.getMappers().stream().filter(mapper -> {
+			return StringUtils.startsWithIgnoreCase(mappedStatement.getId(), mapper.getName());
+		}).findFirst();
+		MetaObject metaRegistry = MetaObjectUtils.forObject(mapperRegistry);
+		
+		@SuppressWarnings("unchecked")
+		Map<Class<?>, MapperProxyFactory<?>> knownMappers = (Map<Class<?>, MapperProxyFactory<?>>) metaRegistry.getValue("knownMappers");
+		MapperProxyFactory<?> mapperProxy = knownMappers.get(firstMapper.get());
+		
+		Entry<Method, MapperMethod> mapperProxyEntry = mapperProxy.getMethodCache().entrySet().stream().filter(entry -> {
+			Method method = entry.getKey();
+			String statement = mapperProxy.getMapperInterface().getName() + "." + method.getName();
+			return mappedStatement.getId().equalsIgnoreCase(statement);
+		}).findFirst().get();
+		
+		return new MetaResultSetHandler(metaObject, executor, configuration, mappedStatement, 
+				mapperProxy, mapperProxyEntry.getValue(), mapperProxyEntry.getKey(),
+				rowBounds, parameterHandler, resultHandler, boundSql, typeHandlerRegistry, objectFactory, reflectorFactory);
 	}
 	
 	public MetaObject getMetaObject() {
@@ -91,6 +128,26 @@ public class MetaResultSetHandler {
 
 	public void setMappedStatement(MappedStatement mappedStatement) {
 		this.mappedStatement = mappedStatement;
+	}
+	
+	public void setMapperProxy(MapperProxyFactory<?> mapperProxy) {
+		this.mapperProxy = mapperProxy;
+	}
+
+	public MapperMethod getMapperMethod() {
+		return mapperMethod;
+	}
+
+	public void setMapperMethod(MapperMethod mapperMethod) {
+		this.mapperMethod = mapperMethod;
+	}
+
+	public Method getMethod() {
+		return method;
+	}
+
+	public void setMethod(Method method) {
+		this.method = method;
 	}
 
 	public RowBounds getRowBounds() {
