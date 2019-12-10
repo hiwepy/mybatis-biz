@@ -2,8 +2,8 @@ package org.apache.ibatis.plugin.meta;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.binding.MapperProxyFactory;
@@ -23,6 +23,10 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.apache.ibatis.utils.MetaObjectUtils;
 import org.springframework.util.StringUtils;
 
+import com.baomidou.mybatisplus.core.override.MybatisMapperMethod;
+import com.baomidou.mybatisplus.core.override.MybatisMapperProxyFactory;
+
+@SuppressWarnings("unchecked")
 public class MetaStatementHandler {
 
 	protected MetaObject metaObject;
@@ -33,8 +37,7 @@ public class MetaStatementHandler {
 	protected ParameterHandler parameterHandler;
 	protected Executor executor;
 	protected MappedStatement mappedStatement;
-	protected MapperProxyFactory<?> mapperProxy;
-	protected MapperMethod mapperMethod;
+	protected Class<?> mapperInterface;
 	protected Method method;
 	protected RowBounds rowBounds;
 	protected BoundSql boundSql;
@@ -46,8 +49,7 @@ public class MetaStatementHandler {
 			ParameterHandler parameterHandler, 
 			Executor executor,
 			MappedStatement mappedStatement, 
-			MapperProxyFactory<?> mapperProxy,
-			MapperMethod mapperMethod,
+			Class<?> mapperInterface,
 			Method method,
 			RowBounds rowBounds,
 			BoundSql boundSql) {
@@ -83,18 +85,38 @@ public class MetaStatementHandler {
 			}).findFirst();
 			MetaObject metaRegistry = MetaObjectUtils.forObject(mapperRegistry);
 			
-			@SuppressWarnings("unchecked")
-			Map<Class<?>, MapperProxyFactory<?>> knownMappers = (Map<Class<?>, MapperProxyFactory<?>>) metaRegistry.getValue("knownMappers");
-			MapperProxyFactory<?> mapperProxy = knownMappers.get(firstMapper.get());
 			
-			Entry<Method, MapperMethod> mapperProxyEntry = mapperProxy.getMethodCache().entrySet().stream().filter(entry -> {
-				Method method = entry.getKey();
-				String statement = mapperProxy.getMapperInterface().getName() + "." + method.getName();
-				return mappedStatement.getId().equalsIgnoreCase(statement);
-			}).findFirst().get();
+			Map<Class<?>, Object> knownMappers = (Map<Class<?>, Object>) metaRegistry.getValue("knownMappers");
+			Object mapperProxyObject = knownMappers.get(firstMapper.get());
+			
+			Class<?> mapperInterface = null;
+			Method method = null;
+			if(mapperProxyObject instanceof MapperProxyFactory) {
+
+				MapperProxyFactory<?> mapperProxy = (MapperProxyFactory<?>) mapperProxyObject;
+				
+				mapperInterface = mapperProxy.getMapperInterface();
+				Optional<Entry<Method, MapperMethod>> mapperProxyEntry = mapperProxy.getMethodCache().entrySet().stream().filter(entry -> {
+					String statement = mapperProxy.getMapperInterface().getName() + "." + entry.getKey().getName();
+					return mappedStatement.getId().equalsIgnoreCase(statement);
+				}).findFirst();
+				if(mapperProxyEntry.isPresent()) {
+					method = mapperProxyEntry.get().getKey();
+				}
+			} else if(mapperProxyObject instanceof MybatisMapperProxyFactory) {
+				MybatisMapperProxyFactory<?> mapperProxy = (MybatisMapperProxyFactory<?>) mapperProxyObject;
+				mapperInterface = mapperProxy.getMapperInterface();
+				Optional<Entry<Method, MybatisMapperMethod>> mapperProxyEntry = mapperProxy.getMethodCache().entrySet().stream().filter(entry -> {
+					String statement = mapperProxy.getMapperInterface().getName() + "." + entry.getKey().getName();
+					return mappedStatement.getId().equalsIgnoreCase(statement);
+				}).findFirst();
+				if(mapperProxyEntry.isPresent()) {
+					method = mapperProxyEntry.get().getKey();
+				}
+			}
 			
 			return new MetaStatementHandler(metaObject, configuration, objectFactory, typeHandlerRegistry, resultSetHandler, 
-					parameterHandler, executor, mappedStatement, mapperProxy, mapperProxyEntry.getValue(), mapperProxyEntry.getKey(), rowBounds, boundSql);
+					parameterHandler, executor, mappedStatement, mapperInterface, method, rowBounds, boundSql);
 		}else {
 			Configuration configuration = (Configuration) metaObject.getValue("configuration");
 			ObjectFactory objectFactory = (ObjectFactory) metaObject.getValue("objectFactory");
@@ -113,18 +135,36 @@ public class MetaStatementHandler {
 			}).findFirst();
 			MetaObject metaRegistry = MetaObjectUtils.forObject(mapperRegistry);
 			
-			@SuppressWarnings("unchecked")
 			Map<Class<?>, MapperProxyFactory<?>> knownMappers = (Map<Class<?>, MapperProxyFactory<?>>) metaRegistry.getValue("knownMappers");
-			MapperProxyFactory<?> mapperProxy = knownMappers.get(firstMapper.get());
+			Object mapperProxyObject = knownMappers.get(firstMapper.get());
 			
-			Entry<Method, MapperMethod> mapperProxyEntry = mapperProxy.getMethodCache().entrySet().stream().filter(entry -> {
-				Method method = entry.getKey();
-				String statement = mapperProxy.getMapperInterface().getName() + "." + method.getName();
-				return mappedStatement.getId().equalsIgnoreCase(statement);
-			}).findFirst().get();
+			Class<?> mapperInterface = null;
+			Method method = null;
+			if(mapperProxyObject instanceof MapperProxyFactory) {
+
+				MapperProxyFactory<?> mapperProxy = (MapperProxyFactory<?>) mapperProxyObject;
+				mapperInterface = mapperProxy.getMapperInterface();
+				Optional<Entry<Method, MapperMethod>> mapperProxyEntry = mapperProxy.getMethodCache().entrySet().stream().filter(entry -> {
+					String statement = mapperProxy.getMapperInterface().getName() + "." + entry.getKey().getName();
+					return mappedStatement.getId().equalsIgnoreCase(statement);
+				}).findFirst();
+				if(mapperProxyEntry.isPresent()) {
+					method = mapperProxyEntry.get().getKey();
+				}
+			} else if(mapperProxyObject instanceof MybatisMapperProxyFactory) {
+				MybatisMapperProxyFactory<?> mapperProxy = (MybatisMapperProxyFactory<?>) mapperProxyObject;
+				mapperInterface = mapperProxy.getMapperInterface();
+				Optional<Entry<Method, MybatisMapperMethod>> mapperProxyEntry = mapperProxy.getMethodCache().entrySet().stream().filter(entry -> {
+					String statement = mapperProxy.getMapperInterface().getName() + "." + entry.getKey().getName();
+					return mappedStatement.getId().equalsIgnoreCase(statement);
+				}).findFirst();
+				if(mapperProxyEntry.isPresent()) {
+					method = mapperProxyEntry.get().getKey();
+				}
+			}
 			
 			return new MetaStatementHandler(metaObject, configuration, objectFactory, typeHandlerRegistry, resultSetHandler, 
-					parameterHandler, executor, mappedStatement, mapperProxy, mapperProxyEntry.getValue(), mapperProxyEntry.getKey(), rowBounds, boundSql);
+					parameterHandler, executor, mappedStatement, mapperInterface, method, rowBounds, boundSql);
 		}
 	}
 	
@@ -192,20 +232,12 @@ public class MetaStatementHandler {
 		this.mappedStatement = mappedStatement;
 	}
 	
-	public MapperProxyFactory<?> getMapperProxy() {
-		return mapperProxy;
+	public Class<?> getMapperInterface() {
+		return mapperInterface;
 	}
 
-	public void setMapperProxy(MapperProxyFactory<?> mapperProxy) {
-		this.mapperProxy = mapperProxy;
-	}
-
-	public MapperMethod getMapperMethod() {
-		return mapperMethod;
-	}
-
-	public void setMapperMethod(MapperMethod mapperMethod) {
-		this.mapperMethod = mapperMethod;
+	public void setMapperInterface(Class<?> mapperInterface) {
+		this.mapperInterface = mapperInterface;
 	}
 
 	public Method getMethod() {

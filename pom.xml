@@ -396,6 +396,7 @@
 		<maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
 		<mybatis.version>3.5.3</mybatis.version>
 		<mybatis-spring.version>2.0.3</mybatis-spring.version>
+		<mybatis-plus.version>3.3.0</mybatis-plus.version>
 	</properties>
 
 	<dependencyManagement>
@@ -460,7 +461,12 @@
 			    <artifactId>mybatis-spring</artifactId>
 			    <version>${mybatis-spring.version}</version>
 			</dependency>
-
+			<!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus -->
+			<dependency>
+			    <groupId>com.baomidou</groupId>
+			    <artifactId>mybatis-plus</artifactId>
+			    <version>${mybatis-plus.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -506,7 +512,10 @@
 		    <groupId>org.mybatis</groupId>
 		    <artifactId>mybatis-spring</artifactId>
 		</dependency>
-		 
+		<dependency>
+		    <groupId>com.baomidou</groupId>
+		    <artifactId>mybatis-plus</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
