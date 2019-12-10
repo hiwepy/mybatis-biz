@@ -61,6 +61,8 @@ public class MetaStatementHandler {
 		this.parameterHandler = parameterHandler;
 		this.executor = executor;
 		this.mappedStatement = mappedStatement;
+		this.mapperInterface = mapperInterface;
+		this.method = method;
 		this.rowBounds = rowBounds;
 		this.boundSql = boundSql;
 	}
