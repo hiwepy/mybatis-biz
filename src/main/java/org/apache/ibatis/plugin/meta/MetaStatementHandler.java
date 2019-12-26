@@ -16,11 +16,11 @@ import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.reflection.factory.ObjectFactory;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
-import org.apache.ibatis.utils.MetaObjectUtils;
 import org.springframework.util.StringUtils;
 
 import com.baomidou.mybatisplus.core.override.MybatisMapperMethod;
@@ -68,7 +68,7 @@ public class MetaStatementHandler {
 	}
 
 	public static MetaStatementHandler metaObject(StatementHandler statementHandler) {
-		MetaObject metaObject = MetaObjectUtils.forObject(statementHandler);
+		MetaObject metaObject = SystemMetaObject.forObject(statementHandler);
 		if(statementHandler instanceof RoutingStatementHandler){
 			Configuration configuration = (Configuration) metaObject.getValue("delegate.configuration");
 			ObjectFactory objectFactory = (ObjectFactory) metaObject.getValue("delegate.objectFactory");
@@ -85,7 +85,7 @@ public class MetaStatementHandler {
 			Optional<Class<?>> firstMapper  = mapperRegistry.getMappers().stream().filter(mapper -> {
 				return StringUtils.startsWithIgnoreCase(mappedStatement.getId(), mapper.getName());
 			}).findFirst();
-			MetaObject metaRegistry = MetaObjectUtils.forObject(mapperRegistry);
+			MetaObject metaRegistry = SystemMetaObject.forObject(mapperRegistry);
 			
 			
 			Map<Class<?>, Object> knownMappers = (Map<Class<?>, Object>) metaRegistry.getValue("knownMappers");
@@ -135,7 +135,7 @@ public class MetaStatementHandler {
 			Optional<Class<?>> firstMapper  = mapperRegistry.getMappers().stream().filter(mapper -> {
 				return StringUtils.startsWithIgnoreCase(mappedStatement.getId(), mapper.getName());
 			}).findFirst();
-			MetaObject metaRegistry = MetaObjectUtils.forObject(mapperRegistry);
+			MetaObject metaRegistry = SystemMetaObject.forObject(mapperRegistry);
 			
 			Map<Class<?>, MapperProxyFactory<?>> knownMappers = (Map<Class<?>, MapperProxyFactory<?>>) metaRegistry.getValue("knownMappers");
 			Object mapperProxyObject = knownMappers.get(firstMapper.get());

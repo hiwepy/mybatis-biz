@@ -3,9 +3,9 @@ package org.apache.ibatis.plugin.meta;
 import org.apache.ibatis.executor.CachingExecutor;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.transaction.Transaction;
-import org.apache.ibatis.utils.MetaObjectUtils;
 
 public class MetaExecutor {
 
@@ -20,7 +20,7 @@ public class MetaExecutor {
 	}
 
 	public static MetaExecutor metaObject(Executor executor) {
-		MetaObject metaObject = MetaObjectUtils.forObject(executor);
+		MetaObject metaObject = SystemMetaObject.forObject(executor);
 		if(executor instanceof CachingExecutor){
 			// 获取当前MappedStatement的Mybatis Configuration对象
 			Configuration configuration = (Configuration) metaObject.getValue("delegate.configuration");

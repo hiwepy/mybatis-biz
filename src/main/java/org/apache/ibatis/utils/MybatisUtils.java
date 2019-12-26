@@ -22,6 +22,7 @@ import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.ParameterMode;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.reflection.factory.ObjectFactory;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
@@ -41,18 +42,18 @@ public abstract class MybatisUtils {
 	protected static final ConcurrentMap<ObjectFactory, ResultHandler<Object>> handlersMap = new ConcurrentHashMap<ObjectFactory, ResultHandler<Object>>();
 	
 	public static Object getTarget(Object target) {
-		MetaObject metaTarget = MetaObjectUtils.forObject(target);
+		MetaObject metaTarget = SystemMetaObject.forObject(target);
 		if(metaTarget.hasGetter("h") || metaTarget.hasGetter("target")){
 			// 分离代理对象链(由于目标类可能被多个拦截器拦截，从而形成多次代理，通过下面的两次循环可以分离出最原始的的目标类)
 			// 分离 Plugin 对象
 			while (metaTarget.hasGetter("h")) {
 				target = metaTarget.getValue("h");
-				metaTarget = MetaObjectUtils.forObject(target);
+				metaTarget = SystemMetaObject.forObject(target);
 			}
 			// 分离最后一个代理对象的目标类
 			while (metaTarget.hasGetter("target")) {
 				target = metaTarget.getValue("target");
-				metaTarget = MetaObjectUtils.forObject(target);
+				metaTarget = SystemMetaObject.forObject(target);
 			}
 			return getTarget(target);
 		}

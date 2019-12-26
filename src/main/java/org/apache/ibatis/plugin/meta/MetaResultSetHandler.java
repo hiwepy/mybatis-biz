@@ -2,8 +2,8 @@ package org.apache.ibatis.plugin.meta;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.binding.MapperProxyFactory;
@@ -15,12 +15,12 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.ReflectorFactory;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.reflection.factory.ObjectFactory;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
-import org.apache.ibatis.utils.MetaObjectUtils;
 import org.springframework.util.StringUtils;
 
 public class MetaResultSetHandler {
@@ -64,7 +64,7 @@ public class MetaResultSetHandler {
 	}
 
 	public static MetaResultSetHandler metaObject(ResultSetHandler resultSetHandler) {
-		MetaObject metaObject = MetaObjectUtils.forObject(resultSetHandler);
+		MetaObject metaObject = SystemMetaObject.forObject(resultSetHandler);
 		Executor executor = (Executor) metaObject.getValue("executor");
 		Configuration configuration = (Configuration) metaObject.getValue("configuration");
 		MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("mappedStatement");
@@ -81,7 +81,7 @@ public class MetaResultSetHandler {
 		Optional<Class<?>> firstMapper  = mapperRegistry.getMappers().stream().filter(mapper -> {
 			return StringUtils.startsWithIgnoreCase(mappedStatement.getId(), mapper.getName());
 		}).findFirst();
-		MetaObject metaRegistry = MetaObjectUtils.forObject(mapperRegistry);
+		MetaObject metaRegistry = SystemMetaObject.forObject(mapperRegistry);
 		
 		@SuppressWarnings("unchecked")
 		Map<Class<?>, MapperProxyFactory<?>> knownMappers = (Map<Class<?>, MapperProxyFactory<?>>) metaRegistry.getValue("knownMappers");

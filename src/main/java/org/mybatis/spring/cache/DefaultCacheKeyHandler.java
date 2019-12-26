@@ -25,10 +25,10 @@ import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.TypeHandlerRegistry;
-import org.apache.ibatis.utils.MetaObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -62,7 +62,7 @@ public class DefaultCacheKeyHandler implements CacheKeyHandler {
 			cacheKey.update(boundSql.getSql());
 		}
 
-		MetaObject metaObject = MetaObjectUtils.forObject(parameterObject);
+		MetaObject metaObject = SystemMetaObject.forObject(parameterObject);
 		if (parameterMappings.size() > 0 && parameterObject != null) {
 			TypeHandlerRegistry typeHandlerRegistry = mappedStatement.getConfiguration().getTypeHandlerRegistry();
 			if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) {
