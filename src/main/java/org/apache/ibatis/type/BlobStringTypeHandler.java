@@ -15,7 +15,7 @@ import org.apache.ibatis.type.MappedJdbcTypes;
 /**
  * 自定义typehandler，解决mybatis存储blob字段后，出现乱码的问题 配置mapper.xml：
  * <result typeHandler="org.apache.ibatis.type.BlobStringTypeHandler"/>
- * @author <a href="https://github.com/vindell">vindell</a>
+ * @author <a href="https://github.com/hiwepy">hiwepy</a>
  */
 @MappedJdbcTypes(JdbcType.BLOB)
 public class BlobStringTypeHandler extends BaseTypeHandler<String> {// 指定字符集
