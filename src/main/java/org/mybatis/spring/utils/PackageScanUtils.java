@@ -18,14 +18,10 @@ public class PackageScanUtils {
 	public static MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory(resolver);
 	
 	/**
-	 * <p>
 	 * 别名通配符设置
-	 * </p>
-	 * <p>
-	 * <property name="typeAliasesPackage" value="org.apache.*.entity"/>
-	 * </p>
+	 * &lt;property name="typeAliasesPackage" value="org.apache.*.entity"/&gt;
 	 * @param typeAliasesPackage 类别名包路径
-	 * @return
+	 * @return 扫描结果
 	 */
 	public static String[] scanTypeAliasesPackage(String typeAliasesPackage) {
 		
