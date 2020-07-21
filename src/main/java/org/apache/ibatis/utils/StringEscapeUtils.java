@@ -5,12 +5,8 @@ package org.apache.ibatis.utils;
  */
 public class StringEscapeUtils{
 
-	/**
+	/*
 	 * 字符串是否需要转义
-	 *
-	 * @param str
-	 * @param len
-	 * @return
 	 */
 	private static boolean isEscapeNeededForString(String str, int len) {
 
@@ -61,11 +57,8 @@ public class StringEscapeUtils{
 		return needsHexEscape;
 	}
 
-	/**
+	/*
 	 * 转义字符串
-	 *
-	 * @param escapeStr
-	 * @return
 	 */
 	public static String escapeString(String escapeStr) {
 

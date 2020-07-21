@@ -21,14 +21,14 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.reflection.MetaObject;
 
 
-/**
+/*
  * @className	： BoundSqlUtils
  * @description	： BoundSql对象操作工具
  * @version 	V1.0 
  */
 public class BoundSQLUtils {
 	
-	/**
+	/*
 	 * 
 	 * @description	：解决 MyBatis 物理分页foreach 参数失效 
 	 * <pre>

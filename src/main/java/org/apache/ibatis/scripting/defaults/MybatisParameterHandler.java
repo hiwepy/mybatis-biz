@@ -36,7 +36,7 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
+/*
  * 
  * @className	： MybatisParameterHandler
  * @description	：对SQL参数(?)设值

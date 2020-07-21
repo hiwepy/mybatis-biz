@@ -14,7 +14,7 @@ import java.net.URLConnection;
 import java.nio.channels.Selector;
 import java.sql.Connection;
 
-/**
+/*
  * <p>
  * IOUtils Copy org.apache.commons.io.IOUtils
  * </p>
@@ -24,7 +24,7 @@ import java.sql.Connection;
  */
 public class IOUtils {
 
-	/**
+	/*
 	 * Closes a URLConnection.
 	 *
 	 * @param conn
@@ -37,7 +37,7 @@ public class IOUtils {
 		}
 	}
 
-	/**
+	/*
 	 * Closes an <code>Reader</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link Reader#close()}, except any exceptions will be
@@ -66,7 +66,7 @@ public class IOUtils {
 		closeQuietly((Closeable) input);
 	}
 
-	/**
+	/*
 	 * Closes an <code>Writer</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link Writer#close()}, except any exceptions will be
@@ -94,7 +94,7 @@ public class IOUtils {
 		closeQuietly((Closeable) output);
 	}
 
-	/**
+	/*
 	 * Closes an <code>InputStream</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link InputStream#close()}, except any exceptions will be
@@ -123,7 +123,7 @@ public class IOUtils {
 		closeQuietly((Closeable) input);
 	}
 
-	/**
+	/*
 	 * Closes an <code>OutputStream</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link OutputStream#close()}, except any exceptions will be
@@ -153,7 +153,7 @@ public class IOUtils {
 		closeQuietly((Closeable) output);
 	}
 
-	/**
+	/*
 	 * Closes a <code>Closeable</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link Closeable#close()}, except any exceptions will be
@@ -201,7 +201,7 @@ public class IOUtils {
 		}
 	}
 
-	/**
+	/*
 	 * Closes a <code>Closeable</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link Closeable#close()}, except any exceptions will be
@@ -256,7 +256,7 @@ public class IOUtils {
 		}
 	}
 
-	/**
+	/*
 	 * Closes a <code>Socket</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link Socket#close()}, except any exceptions will be
@@ -291,7 +291,7 @@ public class IOUtils {
 		}
 	}
 
-	/**
+	/*
 	 * Closes a <code>Selector</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link Selector#close()}, except any exceptions will be
@@ -326,7 +326,7 @@ public class IOUtils {
 		}
 	}
 
-	/**
+	/*
 	 * Closes a <code>ServerSocket</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link ServerSocket#close()}, except any exceptions will be
@@ -361,7 +361,7 @@ public class IOUtils {
 		}
 	}
 
-	/**
+	/*
 	 * Closes a <code>Connection</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link Connection#close()}, except any exceptions will be
@@ -396,7 +396,7 @@ public class IOUtils {
 		}
 	}
 
-	/**
+	/*
 	 * Closes a <code>AutoCloseable</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link AutoCloseable#close()}, except any exceptions will
@@ -431,7 +431,7 @@ public class IOUtils {
 		}
 	}*/
 
-	/**
+	/*
 	 * Closes a <code>AutoCloseable</code> unconditionally.
 	 * <p>
 	 * Equivalent to {@link AutoCloseable#close()}, except any exceptions will

@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public class CollectionUtils {
 
-	/**
+	/*
 	 * <p>
 	 * 校验集合是否为空
 	 * </p>
@@ -16,7 +16,7 @@ public class CollectionUtils {
 		return (coll == null || coll.isEmpty());
 	}
 
-	/**
+	/*
 	 * <p>
 	 * 校验集合是否不为空
 	 * </p>

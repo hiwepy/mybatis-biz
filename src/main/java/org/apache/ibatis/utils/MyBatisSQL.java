@@ -4,19 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * 
- * @className	： MyBatisSql
- * @description	： TODO(描述这个类的作用)
- * @version 	V1.0
- */
 public class MyBatisSQL {
 	
-	/** * 预编译后的 sql 有 ? 号 */
+	/*预编译后的 sql 有 ? 号 */
 	private String preSQL;
-	/** * 运行期 sql */
+	/* 运行期 sql */
 	private String runSQL;
-	/** * 参数 数组 */
+	/* 参数 数组 */
 	private Object[] parameters;
 	
 	public String getPreSQL() {

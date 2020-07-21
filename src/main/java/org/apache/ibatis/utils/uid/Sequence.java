@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-/**
+/*
  * <p>
  * 分布式高效有序ID生产黑科技(sequence) <br>
  * 优化开源项目：http://git.oschina.net/yu120/sequence
@@ -43,7 +43,7 @@ public class Sequence {
 		this.workerId = getMaxWorkerId(datacenterId, maxWorkerId);
 	}
 
-	/**
+	/*
 	 * @param workerId 工作机器ID
 	 * @param datacenterId 序列号
 	 */
@@ -60,7 +60,7 @@ public class Sequence {
 		this.datacenterId = datacenterId;
 	}
 
-	/**
+	/*
 	 * 获取下一个ID
 	 * @return
 	 */
@@ -97,7 +97,7 @@ public class Sequence {
 		return SystemClock.now();
 	}
 
-	/**
+	/*
 	 * <p>
 	 * 获取 maxWorkerId
 	 * </p>
@@ -118,7 +118,7 @@ public class Sequence {
 		return (mpid.toString().hashCode() & 0xffff) % (maxWorkerId + 1);
 	}
 
-	/**
+	/*
 	 * <p>
 	 * 数据标识id部分
 	 * </p>

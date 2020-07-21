@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import org.apache.ibatis.utils.uid.Sequence;
 
-/**
+/*
  * <p>
  * 高效GUID产生算法(sequence),基于Snowflake实现64位自增ID算法。 <br>
  * 优化开源项目 http://git.oschina.net/yu120/sequence
@@ -30,7 +30,7 @@ import org.apache.ibatis.utils.uid.Sequence;
  */
 public class IDWorker {
 
-	/**
+	/*
 	 * 主机和进程的机器码
 	 */
 	private static Sequence worker = new Sequence();
@@ -39,7 +39,7 @@ public class IDWorker {
 		return worker.nextId();
 	}
 
-	/**
+	/*
 	 * <p>
 	 * 获取去掉"-" UUID
 	 * </p>

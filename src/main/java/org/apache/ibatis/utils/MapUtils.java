@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class MapUtils {
 
-	/**
+	/*
 	 * 判断Map是否为空
 	 *
 	 * @param map
@@ -14,7 +14,7 @@ public class MapUtils {
 		return (map == null || map.isEmpty());
 	}
 
-	/**
+	/*
 	 * 判断Map是否不为空
 	 *
 	 * @param map

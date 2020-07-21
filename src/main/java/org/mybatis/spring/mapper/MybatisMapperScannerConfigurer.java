@@ -40,7 +40,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.util.StringUtils;
 
-/**
+/*
  * BeanDefinitionRegistryPostProcessor that searches recursively starting from a
  * base package for interfaces and registers them as {@code MapperFactoryBean}.
  * Note that only interfaces with at least one method will be registered;
@@ -131,7 +131,7 @@ public class MybatisMapperScannerConfigurer implements
 
 	private BeanNameGenerator nameGenerator;
 
-	/**
+	/*
 	 * This property lets you set the base package for your mapper interface
 	 * files.
 	 * <p>
@@ -148,7 +148,7 @@ public class MybatisMapperScannerConfigurer implements
 		this.basePackage = basePackage;
 	}
 
-	/**
+	/*
 	 * Same as {@code MapperFactoryBean#setAddToConfig(boolean)}.
 	 *
 	 * @param addToConfig
@@ -158,7 +158,7 @@ public class MybatisMapperScannerConfigurer implements
 		this.addToConfig = addToConfig;
 	}
 
-	/**
+	/*
 	 * This property specifies the annotation that the scanner will search for.
 	 * <p>
 	 * The scanner will register all interfaces in the base package that also
@@ -173,7 +173,7 @@ public class MybatisMapperScannerConfigurer implements
 		this.annotationClass = annotationClass;
 	}
 
-	/**
+	/*
 	 * This property specifies the parent that the scanner will search for.
 	 * <p>
 	 * The scanner will register all interfaces in the base package that also
@@ -188,7 +188,7 @@ public class MybatisMapperScannerConfigurer implements
 		this.markerInterface = superClass;
 	}
 
-	/**
+	/*
 	 * Specifies which {@code SqlSessionTemplate} to use in the case that there
 	 * is more than one in the spring context. Usually this is only needed when
 	 * you have more than one datasource.
@@ -203,7 +203,7 @@ public class MybatisMapperScannerConfigurer implements
 		this.sqlSessionTemplate = sqlSessionTemplate;
 	}
 
-	/**
+	/*
 	 * Specifies which {@code SqlSessionTemplate} to use in the case that there
 	 * is more than one in the spring context. Usually this is only needed when
 	 * you have more than one datasource.
@@ -221,7 +221,7 @@ public class MybatisMapperScannerConfigurer implements
 		this.sqlSessionTemplateBeanName = sqlSessionTemplateName;
 	}
 
-	/**
+	/*
 	 * Specifies which {@code SqlSessionFactory} to use in the case that there
 	 * is more than one in the spring context. Usually this is only needed when
 	 * you have more than one datasource.
@@ -236,7 +236,7 @@ public class MybatisMapperScannerConfigurer implements
 		this.sqlSessionFactory = sqlSessionFactory;
 	}
 
-	/**
+	/*
 	 * Specifies which {@code SqlSessionFactory} to use in the case that there
 	 * is more than one in the spring context. Usually this is only needed when
 	 * you have more than one datasource.
@@ -254,7 +254,7 @@ public class MybatisMapperScannerConfigurer implements
 		this.sqlSessionFactoryBeanName = sqlSessionFactoryName;
 	}
 
-	/**
+	/*
 	 *
 	 * @since 1.1.1
 	 *
@@ -264,21 +264,21 @@ public class MybatisMapperScannerConfigurer implements
 		this.processPropertyPlaceHolders = processPropertyPlaceHolders;
 	}
 
-	/**
+	/*
 	 * {@inheritDoc}
 	 */
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
 
-	/**
+	/*
 	 * {@inheritDoc}
 	 */
 	public void setBeanName(String name) {
 		this.beanName = name;
 	}
 
-	/**
+	/*
 	 * Gets beanNameGenerator to be used while running the scanner.
 	 *
 	 * @return the beanNameGenerator BeanNameGenerator that has been configured
@@ -288,7 +288,7 @@ public class MybatisMapperScannerConfigurer implements
 		return nameGenerator;
 	}
 
-	/**
+	/*
 	 * Sets beanNameGenerator to be used while running the scanner.
 	 *
 	 * @param nameGenerator
@@ -299,21 +299,21 @@ public class MybatisMapperScannerConfigurer implements
 		this.nameGenerator = nameGenerator;
 	}
 
-	/**
+	/*
 	 * {@inheritDoc}
 	 */
 	public void afterPropertiesSet() throws Exception {
 		notNull(this.basePackage, "Property 'basePackage' is required");
 	}
 
-	/**
+	/*
 	 * {@inheritDoc}
 	 */
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) {
 		// left intentionally blank
 	}
 
-	/**
+	/*
 	 * {@inheritDoc}
 	 * 
 	 * @since 1.0.2

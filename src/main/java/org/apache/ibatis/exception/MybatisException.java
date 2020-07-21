@@ -16,12 +16,7 @@
 package org.apache.ibatis.exception;
 
 /**
- * 
- * @className	： MybatisException
- * @description	： 自定义Mybatis 异常类
- * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
- * @date		： 2017年4月16日 上午10:30:52
- * @version 	V1.0
+ *  自定义Mybatis 异常类
  */
 public class MybatisException extends RuntimeException {
 

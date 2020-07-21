@@ -63,7 +63,7 @@ public class BeanMethodDefinitionFactory {
 		return getMethodDefinition(mappedStatementId, null);
 	}
 	
-	/**
+	/*
 	 * String mappedStatementId = className + "." + method.getName();
 	 * 
 	 * // 获取对应的BoundSql，这个BoundSql其实跟我们利用StatementHandler获取到的BoundSql是同一个对象。

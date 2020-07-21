@@ -40,7 +40,7 @@ public abstract class AbstractInterceptor implements Interceptor {
 	/* Context参数 */
 	protected HashMap<String,Object> extraContext = new HashMap<String,Object>();
 	
-	/**
+	/*
 	 * <pre>
 	 *  统一调用抽象方法：使用metaExecutor可获取以下对象：
 	 *  MetaObject metaObject = metaExecutor.getMetaObject();
@@ -50,7 +50,7 @@ public abstract class AbstractInterceptor implements Interceptor {
 	 */
 	public abstract Object doExecutorIntercept(Invocation invocation,Executor executorProxy,MetaExecutor metaExecutor) throws Throwable;
 	  
-	/**
+	/*
 	 * <pre>
 	 *  统一调用抽象方法：使用metaParameterHandler可获取以下对象：
 	 *  MetaObject metaObject = metaParameterHandler.getMetaObject();
@@ -63,7 +63,7 @@ public abstract class AbstractInterceptor implements Interceptor {
 	 */
 	public abstract Object doParameterIntercept(Invocation invocation,ParameterHandler parameterHandler,MetaParameterHandler metaParameterHandler) throws Throwable;
 
-	/**
+	/*
 	 * <pre>
 	 *  统一调用抽象方法：期中metaStatementHandler可以使用如下方法获取对象：
 	 *  MetaObject metaObject = metaStatementHandler.getMetaObject();
@@ -80,7 +80,7 @@ public abstract class AbstractInterceptor implements Interceptor {
 	 */
 	public abstract Object doStatementIntercept(Invocation invocation,StatementHandler statementHandler,MetaStatementHandler metaStatementHandler) throws Throwable;
 	
-	/**
+	/*
 	 * <pre>
 	 *  统一调用抽象方法：使用metaResultSetHandler可获取以下对象：
 	 *  MetaObject metaObject = metaResultSetHandler.getMetaObject();
@@ -98,14 +98,12 @@ public abstract class AbstractInterceptor implements Interceptor {
 	 */
 	public abstract Object doResultSetIntercept(Invocation invocation,ResultSetHandler resultSetHandler,MetaResultSetHandler metaResultSetHandler) throws Throwable;
 	
-	/**
+	/*
 	 * 扩展拦截方法，用于所有拦截执行完成后的资源释放操作
-	 * @param invocation
-	 * @throws Throwable
 	 */
 	public abstract void doDestroyIntercept(Invocation invocation) throws Throwable;
 	
-	/**
+	/*
 	 * 
 	 * @description	： （Executor，ParameterHandler，ResultSetHandler，StatementHandler）等对象
 	 * <pre>

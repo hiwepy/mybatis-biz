@@ -19,16 +19,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.springframework.util.StringUtils;
 
-@SuppressWarnings("rawtypes")
 public class MyBatisSQLUtils {
 
-	/***
-	 * 
-	 * @description	：
-	 * @param obj		: 参数对象
-	 * @param isReplace	: 是否替换语句中的单引号 true：替换 false:不替换
-	 * @return
-	 */
 	public static String getParameterValue(Object obj,boolean isReplace) {
 		if(StringUtils.isEmpty(obj)){
         	return "";
@@ -50,7 +42,7 @@ public class MyBatisSQLUtils {
 		return MyBatisSQLUtils.getParameterValue(obj,false);
 	}
 
-	/**
+	/*
 	 * 
 	 * @description	： 解析出执行的SQL
 	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
@@ -63,7 +55,7 @@ public class MyBatisSQLUtils {
 		return getRunSQL(statement,parameterObject,false);
 	}
 
-	/**
+	/*
 	 * 
 	 * @description	： 解析出执行的SQL
 	 * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
@@ -89,7 +81,7 @@ public class MyBatisSQLUtils {
 	}
 	
 	
-	/**
+	/*
 	 * 
 	 * @description	：解析参数
 	 * @param statement
@@ -137,7 +129,7 @@ public class MyBatisSQLUtils {
 		return null;
 	}
 
-	/** 
+	/* 
 	 * @description	：运行期获取MyBatis执行的SQL及参数
 	 * @param statementID : Mapper xml 文件里的select Id 
 	 * @param parameterObject:  参数
