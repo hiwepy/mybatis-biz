@@ -10,6 +10,6 @@ MyBatis 增强扩展 ：
 <dependency>
 	<groupId>com.github.hiwepy</groupId>
 	<artifactId>mybatis-biz</artifactId>
-	<version>${project.version}</version>
+	<version>1.0.0.RELEASE</version>
 </dependency>
 ```
